@@ -1,0 +1,86 @@
+MULTIBODY DYNAMICS ME-518
+ASSIGNMENT 2
+FORWARD AND INVERSE KINEMATICS
+SHUBHA TANAYA
+2021MEB1325
+
+
+PROBLEM STATEMENT:
+Consider the planar chain of three links as shown in the figure below. The plane of motion is at an angle α. Link-1 is connected at point O through revolute joint. Link-2 is connected to Link-1 through revolute joint. Link-3 is connected to Link-2 through sliding joint.
+Take lengths l1 = l2 = 3.
+Fig. Configuration of the problem
+Using transformation matrices, write a kinematic model (forward kinematics) of the system at any arbitrary values of the input parameters α, θ1, θ2 and d.
+Verify the values for inverse kinematic model.
+Compute the reaction forces and reaction moments at the joints required to produce the motion.
+
+INTRODUCTION:
+THEORY: A multilink system is a type of mechanical system, usually programmable, with similar functions to a single link system but the degrees of freedom and complexity of configuration increases. The links of such a multi-link system are connected by joints allowing either rotational motion or translational (linear) displacement. The links of the manipulator can be considered to form a kinematic chain where the terminus of the kinematic chain of the manipulator is called the end effector and it is analogous to the human hand. Forward Kinematics: Forward kinematics refers to process of obtaining position and velocity of end effector, given the known joint angles and angular velocities. Denavit–Hartenberg parameters (also called DH parameters) are the four parameters associated with a particular
+convention for attaching reference frames to the links of a spatial kinematic chain, or robot
+manipulator.
+
+
+MATLAB CODE:
+
+Transformation_matrix function:
+function ret = transformation_matrix(theta, alpha, d, a)
+ret = [cos(theta), -sin(theta)*cos(alpha), sin(theta)*sin(alpha), a*cos(theta);
+sin(theta), cos(theta)*cos(alpha), -cos(theta)*sin(alpha), a*sin(theta);
+0, sin(alpha), cos(alpha), d;
+0, 0, 0, 1];
+End
+
+Main Code:
+clc;
+clear;
+alpha = input("Enter the value of alpha in degrees = ");
+theta1 = input("Enter the value of theta1 in degrees = ");
+theta2 = input("Enter the value of theta2 in degrees = ");
+d = input("Enter the value of d in meters= ");
+a=alpha*(pi/180);
+b=theta1*(pi/180);
+c=theta2*(pi/180);
+l1 = 3;
+l2 = 3;
+M0 = transformation_matrix(a, -pi/2, 0, 0);
+M1 = transformation_matrix(b, 0, 0, l1);
+M2 = transformation_matrix((pi/2)+c, pi/2, 0, 0);
+M3 = transformation_matrix(0, 0, l2+d, 0);
+final_matrix = M0 * (M1 * (M2 * M3));
+disp("x final position is " + final_matrix(1,4));
+disp("y final position is " + final_matrix(2,4));
+disp("z final position is " + final_matrix(3,4));
+
+RESULT OF FORWARD KINEMATICS USING
+THE CODE-
+Enter the value of alpha in degrees = 30
+Enter the value of theta1 in degrees = 10
+Enter the value of theta2 in degrees = 55
+Enter the value of d in meters= 20
+
+x final position is 10.9766
+y final position is 6.3373
+z final position is -21.366
+
+The transformation parameters are called as
+D-H parameters
+
+a = length of common normal α = angle about the common normal
+d = offset along the previous z to common normal
+θ = angle about previous z from old x to new x
+Using the DH parameters we can make the transformation matrix of the order 4*4
+
+FORCE AND MOMENT:
+Compute the reaction forces and reaction moments at the joints required to produce the motion.
+Consider the motion of the chain in which the magnitude of angular velocity of Link-1 with respect to fixed frame is ω1, angular velocity magnitude of Link-2 with respect to Link-1 is ω2 and velocity of Link-3 with respect to Link-
+2 is v.
+For this case, take masses of link-1 and link-2 as m, link-3 to be mass-less, and α as 60◦. You can assume any cross-sectional area of the links.
+For calculating the force and moment we use
+Newtons Laws;
+
+INVERSE KINEMATICS:
+Inverse kinematics is just opposite to forward kinematics. It refers to process of obtaining joint angles from known coordinates of end effector.
+Inverse kinematics is in general very difficult to solve unless a special case of motion strategy with two motion patterns.
+
+CONCLUSION:
+Any multi-link system can be solved using transformation matrix derived using D H parameters by the method of forward kinematics.
+Force and moments can be found using newtons law with the help of inertia matrix.
